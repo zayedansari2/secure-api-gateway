@@ -65,26 +65,6 @@ A production-ready API Gateway implementing **Diffie-Hellman key exchange** and 
 - **CORS Ready**: Cross-origin resource sharing support
 - **Scalable Architecture**: Stateless design for horizontal scaling
 
-## 🚀 Quick Start
-
-### 1. Install Dependencies
-
-```bash
-npm install
-```
-
-### 2. Start the Server
-
-```bash
-npm start
-```
-
-### 3. Run the Client Demo
-
-```bash
-npm run client
-```
-
 ## 📡 API Endpoints
 
 | Endpoint        | Method | Description             | Auth Required |
@@ -198,69 +178,6 @@ Client                           API Gateway                    Backend
   │ ─────────────────────────────────►│ ──────────────────────────►│
   │ ◄─────────────────────────────────│ ◄──────────────────────────│
   │   Encrypted response              │   Business logic          │
-```
-
-## 🚀 Deployment
-
-### Deploy to Render (Recommended)
-
-1. **Push to GitHub:**
-
-```bash
-git init
-git add .
-git commit -m "Initial commit: Secure API Gateway"
-git branch -M main
-git remote add origin https://github.com/yourusername/secure-api-gateway.git
-git push -u origin main
-```
-
-2. **Deploy on Render:**
-
-   - Go to [render.com](https://render.com)
-   - Connect your GitHub repository
-   - Choose "Web Service"
-   - Build Command: `npm install`
-   - Start Command: `npm start`
-   - Environment: Node.js
-
-3. **Environment Variables:**
-   - `NODE_ENV=production`
-   - `PORT=10000` (Render default)
-
-### Deploy to Railway
-
-1. **Install Railway CLI:**
-
-```bash
-npm install -g @railway/cli
-```
-
-2. **Deploy:**
-
-```bash
-railway login
-railway init
-railway up
-```
-
-### Deploy to Glitch
-
-1. Go to [glitch.com](https://glitch.com)
-2. Import from GitHub
-3. Your app will be live instantly
-
-## 🛠️ Development
-
-```bash
-# Development with auto-reload
-npm run dev
-
-# Run client demo
-npm run client
-
-# Test all endpoints
-npm test
 ```
 
 ## 📊 Performance & Monitoring

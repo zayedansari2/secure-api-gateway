@@ -61,7 +61,7 @@ let sharedSecret = null;
 function encrypt(text, key) {
   const iv = crypto.randomBytes(16);
   const keyBuffer = crypto.createHash("sha256").update(key).digest();
-  const cipher = crypto.createCipher("aes-256-cbc", keyBuffer);
+  const cipher = crypto.createCipheriv("aes-256-cbc", keyBuffer, iv);
   let encrypted = cipher.update(text, "utf8", "base64");
   encrypted += cipher.final("base64");
   return {
@@ -71,9 +71,10 @@ function encrypt(text, key) {
 }
 
 // AES-256-CBC decryption function
-function decrypt(encryptedData, key, iv) {
+function decrypt(encryptedData, key, ivBase64) {
   const keyBuffer = crypto.createHash("sha256").update(key).digest();
-  const decipher = crypto.createDecipher("aes-256-cbc", keyBuffer);
+  const iv = Buffer.from(ivBase64, "base64");
+  const decipher = crypto.createDecipheriv("aes-256-cbc", keyBuffer, iv);
   let decrypted = decipher.update(encryptedData, "base64", "utf8");
   decrypted += decipher.final("utf8");
   return decrypted;
