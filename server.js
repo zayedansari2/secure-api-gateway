@@ -6,6 +6,9 @@ const rateLimit = require("express-rate-limit");
 const app = express();
 app.use(express.json());
 
+// Serve static files from public directory
+app.use(express.static("public"));
+
 // Rate limiting middleware
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -154,8 +157,13 @@ app.get("/health", (req, res) => {
   });
 });
 
-// Test route to confirm server is running
+// Redirect root to the visual demo
 app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/public/index.html");
+});
+
+// API info endpoint
+app.get("/api", (req, res) => {
   res.json({
     message: "Secure API Gateway server is running 🚀",
     endpoints: {

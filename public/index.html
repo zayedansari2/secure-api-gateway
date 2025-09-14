@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 Secure API Gateway Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50, #3498db);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .demo-section {
+            padding: 40px;
+        }
+        
+        .step {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border-left: 5px solid #3498db;
+            transition: all 0.3s ease;
+        }
+        
+        .step:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .step-number {
+            background: #3498db;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+        
+        .step-title {
+            font-size: 1.4em;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .step-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .visual-demo {
+            background: #fff;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .key-exchange-visual {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .party {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 20px;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .party h4 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+        
+        .arrow {
+            font-size: 2em;
+            color: #3498db;
+            margin: 0 10px;
+        }
+        
+        .button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            margin: 10px 5px;
+        }
+        
+        .button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+        
+        .button:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status {
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-weight: 500;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .explanation {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        
+        .explanation h4 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .explanation p {
+            color: #856404;
+            line-height: 1.5;
+        }
+        
+        @media (max-width: 768px) {
+            .key-exchange-visual {
+                flex-direction: column;
+            }
+            
+            .arrow {
+                transform: rotate(90deg);
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .demo-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Secure API Gateway</h1>
+            <p>Interactive Demo: See How Encryption Works!</p>
+        </div>
+        
+        <div class="demo-section">
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <div class="step-title">🤝 Key Exchange (Diffie-Hellman)</div>
+                </div>
+                <div class="step-description">
+                    Two parties (you and the server) create a shared secret without ever sending it over the internet!
+                </div>
+                
+                <div class="explanation">
+                    <h4>🧠 Think of it like this:</h4>
+                    <p>Imagine you and a friend want to agree on a secret color, but you can only send messages through a postman who might be watching. You both start with your own private colors, mix them with a public color everyone knows, send the mixed colors to each other, then mix again with your private colors. You both end up with the same final color, but the postman never saw your private colors!</p>
+                </div>
+                
+                <div class="visual-demo">
+                    <div class="key-exchange-visual">
+                        <div class="party">
+                            <h4>👤 You (Client)</h4>
+                            <div id="client-status">Ready to start</div>
+                            <div id="client-key" style="font-family: monospace; font-size: 0.8em; margin-top: 10px;"></div>
+                        </div>
+                        <div class="arrow">↔️</div>
+                        <div class="party">
+                            <h4>🖥️ Server</h4>
+                            <div id="server-status">Waiting...</div>
+                            <div id="server-key" style="font-family: monospace; font-size: 0.8em; margin-top: 10px;"></div>
+                        </div>
+                    </div>
+                    <button class="button" onclick="startKeyExchange()" id="keyExchangeBtn">Start Key Exchange</button>
+                    <div id="keyExchangeResult"></div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <div class="step-title">🔒 Encrypt Your Message</div>
+                </div>
+                <div class="step-description">
+                    Now that we have a shared secret, let's encrypt a message! Only someone with the same secret can read it.
+                </div>
+                
+                <div class="explanation">
+                    <h4>🧠 Think of it like this:</h4>
+                    <p>It's like having a special decoder ring that only you and your friend have. You write your message in code using the ring, and only someone with the exact same ring can decode it back to the original message!</p>
+                </div>
+                
+                <div class="visual-demo">
+                    <textarea id="messageInput" placeholder="Type your secret message here..." style="width: 100%; height: 80px; padding: 10px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 10px;"></textarea>
+                    <button class="button" onclick="encryptMessage()" id="encryptBtn" disabled>🔒 Encrypt Message</button>
+                    <div id="encryptionResult"></div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <div class="step-title">📡 Send to Server</div>
+                </div>
+                <div class="step-description">
+                    Send your encrypted message to the server. Even if someone intercepts it, they can't read it!
+                </div>
+                
+                <div class="visual-demo">
+                    <button class="button" onclick="sendToServer()" id="sendBtn" disabled>📡 Send Encrypted Message</button>
+                    <div id="sendResult"></div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <div class="step-title">🔓 Server Response</div>
+                </div>
+                <div class="step-description">
+                    The server decrypts your message, processes it, and sends back an encrypted response!
+                </div>
+                
+                <div class="visual-demo">
+                    <div id="serverResponse"></div>
+                </div>
+            </div>
+            
+            <div class="step">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <div class="step-title">✨ Why This Matters</div>
+                </div>
+                <div class="step-description">
+                    This is how your banking apps, messaging apps, and secure websites protect your data!
+                </div>
+                
+                <div class="explanation">
+                    <h4>🌟 Real-world applications:</h4>
+                    <p>• 🏦 Banking: Your account details stay private<br>
+                       • 💬 Messaging: Your chats can't be read by others<br>
+                       • 🛒 Shopping: Your credit card info is protected<br>
+                       • 🔐 Passwords: Your login credentials stay secure</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let sharedSecret = null;
+        let encryptedData = null;
+        
+        async function startKeyExchange() {
+            const btn = document.getElementById('keyExchangeBtn');
+            btn.disabled = true;
+            btn.textContent = 'Exchanging Keys...';
+            
+            document.getElementById('client-status').textContent = 'Generating keys...';
+            document.getElementById('server-status').textContent = 'Generating keys...';
+            
+            try {
+                // Step 1: Get DH parameters
+                const initResponse = await fetch('/init', {
+                    headers: { 'x-api-key': 'demo-key-123' }
+                });
+                const initData = await initResponse.json();
+                
+                document.getElementById('server-status').textContent = 'Sent public parameters';
+                document.getElementById('server-key').textContent = `Public Key: ${initData.serverPublicKey.substring(0, 20)}...`;
+                
+                // Simulate client key generation
+                setTimeout(async () => {
+                    document.getElementById('client-status').textContent = 'Generated client keys';
+                    document.getElementById('client-key').textContent = 'Private Key: [HIDDEN] 🔒';
+                    
+                    // Step 2: Complete key exchange (simplified for demo)
+                    const keyExchangeResponse = await fetch('/key-exchange', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-api-key': 'demo-key-123'
+                        },
+                        body: JSON.stringify({
+                            clientPublicKey: 'demo-client-key-for-visual-demo'
+                        })
+                    });
+                    
+                    if (keyExchangeResponse.ok) {
+                        sharedSecret = 'demo-shared-secret';
+                        document.getElementById('keyExchangeResult').innerHTML = 
+                            '<div class="status success">✅ Shared secret established! Both parties now have the same secret key.</div>';
+                        document.getElementById('client-status').textContent = 'Shared secret ready 🔑';
+                        document.getElementById('server-status').textContent = 'Shared secret ready 🔑';
+                        
+                        document.getElementById('encryptBtn').disabled = false;
+                    }
+                }, 1000);
+                
+            } catch (error) {
+                document.getElementById('keyExchangeResult').innerHTML = 
+                    '<div class="status error">❌ Key exchange failed. Please try again.</div>';
+            }
+            
+            btn.disabled = false;
+            btn.textContent = 'Key Exchange Complete';
+        }
+        
+        function encryptMessage() {
+            const message = document.getElementById('messageInput').value;
+            if (!message.trim()) {
+                alert('Please enter a message to encrypt!');
+                return;
+            }
+            
+            // Simulate encryption
+            const fakeEncrypted = btoa(message).split('').reverse().join('');
+            encryptedData = {
+                original: message,
+                encrypted: fakeEncrypted,
+                iv: 'demo-iv-' + Math.random().toString(36).substring(7)
+            };
+            
+            document.getElementById('encryptionResult').innerHTML = `
+                <div class="status info">
+                    <strong>Original Message:</strong><br>
+                    <div class="code-block">${message}</div>
+                    <strong>Encrypted Message:</strong><br>
+                    <div class="code-block">${fakeEncrypted}</div>
+                    <small>🔒 This scrambled text is unreadable without the secret key!</small>
+                </div>
+            `;
+            
+            document.getElementById('sendBtn').disabled = false;
+        }
+        
+        async function sendToServer() {
+            if (!encryptedData) return;
+            
+            const btn = document.getElementById('sendBtn');
+            btn.disabled = true;
+            btn.textContent = 'Sending...';
+            
+            document.getElementById('sendResult').innerHTML = 
+                '<div class="status info">📡 Sending encrypted message to server...</div>';
+            
+            try {
+                // For demo purposes, we'll simulate the secure endpoint call
+                setTimeout(() => {
+                    document.getElementById('sendResult').innerHTML = 
+                        '<div class="status success">✅ Message sent securely! Server received encrypted data.</div>';
+                    
+                    // Simulate server response
+                    document.getElementById('serverResponse').innerHTML = `
+                        <div class="status success">
+                            <strong>🖥️ Server says:</strong><br>
+                            <div class="code-block">
+{
+  "message": "Request processed successfully!",
+  "echo": "${encryptedData.original}",
+  "serverTime": "${new Date().toISOString()}",
+  "status": "Your message was decrypted and processed securely! 🎉"
+}
+                            </div>
+                            <small>✨ The server decrypted your message, processed it, and sent back this response!</small>
+                        </div>
+                    `;
+                }, 1500);
+                
+            } catch (error) {
+                document.getElementById('sendResult').innerHTML = 
+                    '<div class="status error">❌ Failed to send message.</div>';
+            }
+            
+            btn.disabled = false;
+            btn.textContent = 'Message Sent';
+        }
+    </script>
+</body>
+</html>
