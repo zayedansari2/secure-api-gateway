@@ -1,182 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>🎓 Learn About Encryption</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            margin: 0;
-            padding: 20px;
-            background: linear-gradient(135deg, #74b9ff, #0984e3);
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            padding: 40px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        h1 {
-            color: #2d3436;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 2.5em;
-        }
-        
-        .concept {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 25px;
-            margin-bottom: 25px;
-            border-left: 5px solid #00b894;
-        }
-        
-        .concept h2 {
-            color: #00b894;
-            margin-bottom: 15px;
-        }
-        
-        .analogy {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 15px 0;
-        }
-        
-        .analogy h3 {
-            color: #856404;
-            margin-bottom: 10px;
-        }
-        
-        .example {
-            background: #e3f2fd;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 15px 0;
-        }
-        
-        .example h3 {
-            color: #1976d2;
-            margin-bottom: 10px;
-        }
-        
-        .back-btn {
-            display: inline-block;
-            background: #0984e3;
-            color: white;
-            text-decoration: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            margin-bottom: 20px;
-            transition: background 0.3s ease;
-        }
-        
-        .back-btn:hover {
-            background: #74b9ff;
-        }
-        
-        .visual {
-            text-align: center;
-            font-size: 2em;
-            margin: 20px 0;
-        }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        margin: 0;
+        padding: 20px;
+        background: linear-gradient(135deg, #74b9ff, #0984e3);
+        min-height: 100vh;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #2d3436;
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 2.5em;
+      }
+
+      .concept {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 25px;
+        margin-bottom: 25px;
+        border-left: 5px solid #00b894;
+      }
+
+      .concept h2 {
+        color: #00b894;
+        margin-bottom: 15px;
+      }
+
+      .analogy {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 15px 0;
+      }
+
+      .analogy h3 {
+        color: #856404;
+        margin-bottom: 10px;
+      }
+
+      .example {
+        background: #e3f2fd;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 15px 0;
+      }
+
+      .example h3 {
+        color: #1976d2;
+        margin-bottom: 10px;
+      }
+
+      .back-btn {
+        display: inline-block;
+        background: #0984e3;
+        color: white;
+        text-decoration: none;
+        padding: 12px 25px;
+        border-radius: 25px;
+        margin-bottom: 20px;
+        transition: background 0.3s ease;
+      }
+
+      .back-btn:hover {
+        background: #74b9ff;
+      }
+
+      .visual {
+        text-align: center;
+        font-size: 2em;
+        margin: 20px 0;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <a href="/" class="back-btn">← Back to Demo</a>
-        
-        <h1>🎓 Understanding Encryption</h1>
-        
-        <div class="concept">
-            <h2>🔐 What is Encryption?</h2>
-            <p>Encryption is like putting your message in a locked box. Only someone with the right key can open it and read your message.</p>
-            
-            <div class="analogy">
-                <h3>🏠 Real-world analogy:</h3>
-                <p>Think of encryption like your house key. You can give someone directions to your house (that's like sending data over the internet), but without the key, they can't get inside to see your private stuff!</p>
-            </div>
+      <a href="/" class="back-btn">← Back to Demo</a>
+
+      <h1>🎓 Understanding Encryption</h1>
+
+      <div class="concept">
+        <h2>🔐 What is Encryption?</h2>
+        <p>
+          Encryption is like putting your message in a locked box. Only someone
+          with the right key can open it and read your message.
+        </p>
+
+        <div class="analogy">
+          <h3>🏠 Real-world analogy:</h3>
+          <p>
+            Think of encryption like your house key. You can give someone
+            directions to your house (that's like sending data over the
+            internet), but without the key, they can't get inside to see your
+            private stuff!
+          </p>
         </div>
-        
-        <div class="concept">
-            <h2>🤝 What is Diffie-Hellman Key Exchange?</h2>
-            <p>It's a clever way for two people to create a shared secret without ever sending the secret itself over the internet!</p>
-            
-            <div class="analogy">
-                <h3>🎨 Paint mixing analogy:</h3>
-                <p><strong>Step 1:</strong> You and your friend both agree on a common paint color (like yellow) - everyone can know this.<br>
-                <strong>Step 2:</strong> You each pick a secret color (you pick red, friend picks blue) - keep these private!<br>
-                <strong>Step 3:</strong> Mix your secret color with the common color (you get orange, friend gets green).<br>
-                <strong>Step 4:</strong> Send your mixed color to each other.<br>
-                <strong>Step 5:</strong> Mix the received color with your original secret color.<br>
-                <strong>Result:</strong> You both end up with the same final color, but nobody watching knows your secret colors!</p>
-            </div>
-            
-            <div class="visual">
-                🎨 You: Red + Yellow = Orange → Friend<br>
-                🎨 Friend: Blue + Yellow = Green → You<br>
-                🎨 You: Green + Red = Brown<br>
-                🎨 Friend: Orange + Blue = Brown<br>
-                ✨ Same final color = Shared secret!
-            </div>
+      </div>
+
+      <div class="concept">
+        <h2>🤝 What is Diffie-Hellman Key Exchange?</h2>
+        <p>
+          It's a clever way for two people to create a shared secret without
+          ever sending the secret itself over the internet!
+        </p>
+
+        <div class="analogy">
+          <h3>🎨 Paint mixing analogy:</h3>
+          <p>
+            <strong>Step 1:</strong> You and your friend both agree on a common
+            paint color (like yellow) - everyone can know this.<br />
+            <strong>Step 2:</strong> You each pick a secret color (you pick red,
+            friend picks blue) - keep these private!<br />
+            <strong>Step 3:</strong> Mix your secret color with the common color
+            (you get orange, friend gets green).<br />
+            <strong>Step 4:</strong> Send your mixed color to each other.<br />
+            <strong>Step 5:</strong> Mix the received color with your original
+            secret color.<br />
+            <strong>Result:</strong> You both end up with the same final color,
+            but nobody watching knows your secret colors!
+          </p>
         </div>
-        
-        <div class="concept">
-            <h2>🔒 AES Encryption</h2>
-            <p>Once we have our shared secret, we use it like a super-strong lock to protect our messages.</p>
-            
-            <div class="analogy">
-                <h3>📚 Secret decoder ring:</h3>
-                <p>Remember those decoder rings from cereal boxes? AES is like having the world's most sophisticated decoder ring. You write your message in code using the ring, and only someone with the exact same ring can decode it back to the original message!</p>
-            </div>
-            
-            <div class="example">
-                <h3>📝 Example:</h3>
-                <p><strong>Original:</strong> "Hello, this is my secret message!"<br>
-                <strong>Encrypted:</strong> "X7$9mK2@pL5#nR8qW3*vB6&hF4..."<br>
-                <strong>After decryption:</strong> "Hello, this is my secret message!"</p>
-            </div>
+
+        <div class="visual">
+          🎨 You: Red + Yellow = Orange → Friend<br />
+          🎨 Friend: Blue + Yellow = Green → You<br />
+          🎨 You: Green + Red = Brown<br />
+          🎨 Friend: Orange + Blue = Brown<br />
+          ✨ Same final color = Shared secret!
         </div>
-        
-        <div class="concept">
-            <h2>🌍 Why Does This Matter?</h2>
-            <p>This technology protects you every day:</p>
-            
-            <div class="example">
-                <h3>🛡️ Daily protection:</h3>
-                <p>• 💳 <strong>Online shopping:</strong> Your credit card details are encrypted<br>
-                • 📱 <strong>Text messages:</strong> Your private conversations stay private<br>
-                • 🏦 <strong>Banking apps:</strong> Your account information is protected<br>
-                • 🔐 <strong>Passwords:</strong> Your login details are scrambled<br>
-                • 📧 <strong>Email:</strong> Your personal emails are secured</p>
-            </div>
+      </div>
+
+      <div class="concept">
+        <h2>🔒 AES Encryption</h2>
+        <p>
+          Once we have our shared secret, we use it like a super-strong lock to
+          protect our messages.
+        </p>
+
+        <div class="analogy">
+          <h3>📚 Secret decoder ring:</h3>
+          <p>
+            Remember those decoder rings from cereal boxes? AES is like having
+            the world's most sophisticated decoder ring. You write your message
+            in code using the ring, and only someone with the exact same ring
+            can decode it back to the original message!
+          </p>
         </div>
-        
-        <div class="concept">
-            <h2>🚀 What Makes This Demo Special?</h2>
-            <p>This isn't just theory - it's a real, working implementation of the same security technology used by banks, governments, and tech companies worldwide!</p>
-            
-            <div class="example">
-                <h3>✨ Professional features:</h3>
-                <p>• 🔐 <strong>2048-bit encryption:</strong> Military-grade security<br>
-                • 🛡️ <strong>Rate limiting:</strong> Prevents abuse<br>
-                • 📊 <strong>API authentication:</strong> Controlled access<br>
-                • 📝 <strong>Request logging:</strong> Security monitoring<br>
-                • ⚡ <strong>Production ready:</strong> Scalable architecture</p>
-            </div>
+
+        <div class="example">
+          <h3>📝 Example:</h3>
+          <p>
+            <strong>Original:</strong> "Hello, this is my secret message!"<br />
+            <strong>Encrypted:</strong> "X7$9mK2@pL5#nR8qW3*vB6&hF4..."<br />
+            <strong>After decryption:</strong> "Hello, this is my secret
+            message!"
+          </p>
         </div>
-        
-        <div style="text-align: center; margin-top: 40px;">
-            <a href="/" class="back-btn">🚀 Try the Interactive Demo</a>
+      </div>
+
+      <div class="concept">
+        <h2>🌍 Why Does This Matter?</h2>
+        <p>This technology protects you every day:</p>
+
+        <div class="example">
+          <h3>🛡️ Daily protection:</h3>
+          <p>
+            • 💳 <strong>Online shopping:</strong> Your credit card details are
+            encrypted<br />
+            • 📱 <strong>Text messages:</strong> Your private conversations stay
+            private<br />
+            • 🏦 <strong>Banking apps:</strong> Your account information is
+            protected<br />
+            • 🔐 <strong>Passwords:</strong> Your login details are scrambled<br />
+            • 📧 <strong>Email:</strong> Your personal emails are secured
+          </p>
         </div>
+      </div>
+
+      <div class="concept">
+        <h2>🚀 What Makes This Demo Special?</h2>
+        <p>
+          This isn't just theory - it's a real, working implementation of the
+          same security technology used by banks, governments, and tech
+          companies worldwide!
+        </p>
+
+        <div class="example">
+          <h3>✨ Professional features:</h3>
+          <p>
+            • 🔐 <strong>2048-bit encryption:</strong> Military-grade
+            security<br />
+            • 🛡️ <strong>Rate limiting:</strong> Prevents abuse<br />
+            • 📊 <strong>API authentication:</strong> Controlled access<br />
+            • 📝 <strong>Request logging:</strong> Security monitoring<br />
+            • ⚡ <strong>Production ready:</strong> Scalable architecture
+          </p>
+        </div>
+      </div>
+
+      <div style="text-align: center; margin-top: 40px">
+        <a href="/" class="back-btn">🚀 Try the Interactive Demo</a>
+      </div>
     </div>
-</body>
+  </body>
 </html>

@@ -228,35 +228,32 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔐 Secure API Gateway</h1>
-            <p>Interactive Demo: See How Encryption Works!</p>
+            <h1>Secure API Gateway</h1>
+            <p>Interactive Cryptographic Security Demonstration</p>
         </div>
         
         <div class="demo-section">
             <div class="step">
                 <div class="step-header">
                     <div class="step-number">1</div>
-                    <div class="step-title">🤝 Key Exchange (Diffie-Hellman)</div>
+                    <div class="step-title">Key Exchange (Diffie-Hellman)</div>
                 </div>
                 <div class="step-description">
-                    Two parties (you and the server) create a shared secret without ever sending it over the internet!
+                    Establish a shared cryptographic secret between client and server without transmitting the secret itself.
                 </div>
                 
-                <div class="explanation">
-                    <h4>🧠 Think of it like this:</h4>
-                    <p>Imagine you and a friend want to agree on a secret color, but you can only send messages through a postman who might be watching. You both start with your own private colors, mix them with a public color everyone knows, send the mixed colors to each other, then mix again with your private colors. You both end up with the same final color, but the postman never saw your private colors!</p>
-                </div>
+
                 
                 <div class="visual-demo">
                     <div class="key-exchange-visual">
                         <div class="party">
-                            <h4>👤 You (Client)</h4>
+                            <h4>Client</h4>
                             <div id="client-status">Ready to start</div>
                             <div id="client-key" style="font-family: monospace; font-size: 0.8em; margin-top: 10px;"></div>
                         </div>
                         <div class="arrow">↔️</div>
                         <div class="party">
-                            <h4>🖥️ Server</h4>
+                            <h4>Server</h4>
                             <div id="server-status">Waiting...</div>
                             <div id="server-key" style="font-family: monospace; font-size: 0.8em; margin-top: 10px;"></div>
                         </div>
@@ -269,20 +266,17 @@
             <div class="step">
                 <div class="step-header">
                     <div class="step-number">2</div>
-                    <div class="step-title">🔒 Encrypt Your Message</div>
+                    <div class="step-title">Message Encryption</div>
                 </div>
                 <div class="step-description">
-                    Now that we have a shared secret, let's encrypt a message! Only someone with the same secret can read it.
+                    Use the shared secret to encrypt messages with AES-256-CBC encryption. Only parties with the secret can decrypt the data.
                 </div>
                 
-                <div class="explanation">
-                    <h4>🧠 Think of it like this:</h4>
-                    <p>It's like having a special decoder ring that only you and your friend have. You write your message in code using the ring, and only someone with the exact same ring can decode it back to the original message!</p>
-                </div>
+
                 
                 <div class="visual-demo">
                     <textarea id="messageInput" placeholder="Type your secret message here..." style="width: 100%; height: 80px; padding: 10px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 10px;"></textarea>
-                    <button class="button" onclick="encryptMessage()" id="encryptBtn" disabled>🔒 Encrypt Message</button>
+                    <button class="button" onclick="encryptMessage()" id="encryptBtn" disabled>Encrypt Message</button>
                     <div id="encryptionResult"></div>
                 </div>
             </div>
@@ -290,14 +284,14 @@
             <div class="step">
                 <div class="step-header">
                     <div class="step-number">3</div>
-                    <div class="step-title">📡 Send to Server</div>
+                    <div class="step-title">Secure Transmission</div>
                 </div>
                 <div class="step-description">
-                    Send your encrypted message to the server. Even if someone intercepts it, they can't read it!
+                    Transmit encrypted data to the server. Intercepted messages remain unreadable without the decryption key.
                 </div>
                 
                 <div class="visual-demo">
-                    <button class="button" onclick="sendToServer()" id="sendBtn" disabled>📡 Send Encrypted Message</button>
+                    <button class="button" onclick="sendToServer()" id="sendBtn" disabled>Send Encrypted Message</button>
                     <div id="sendResult"></div>
                 </div>
             </div>
@@ -305,10 +299,10 @@
             <div class="step">
                 <div class="step-header">
                     <div class="step-number">4</div>
-                    <div class="step-title">🔓 Server Response</div>
+                    <div class="step-title">Server Processing</div>
                 </div>
                 <div class="step-description">
-                    The server decrypts your message, processes it, and sends back an encrypted response!
+                    Server decrypts the message, processes the request, and returns an encrypted response using the same shared secret.
                 </div>
                 
                 <div class="visual-demo">
@@ -319,18 +313,20 @@
             <div class="step">
                 <div class="step-header">
                     <div class="step-number">5</div>
-                    <div class="step-title">✨ Why This Matters</div>
+                    <div class="step-title">Real-World Applications</div>
                 </div>
                 <div class="step-description">
-                    This is how your banking apps, messaging apps, and secure websites protect your data!
+                    This cryptographic implementation is used across critical infrastructure and applications.
                 </div>
                 
                 <div class="explanation">
-                    <h4>🌟 Real-world applications:</h4>
-                    <p>• 🏦 Banking: Your account details stay private<br>
-                       • 💬 Messaging: Your chats can't be read by others<br>
-                       • 🛒 Shopping: Your credit card info is protected<br>
-                       • 🔐 Passwords: Your login credentials stay secure</p>
+                    <h4>Industry Applications:</h4>
+                    <p>• Banking: Account details and transaction security<br>
+                       • Messaging: End-to-end encrypted communications<br>
+                       • E-commerce: Credit card and payment protection<br>
+                       • Authentication: Secure login credential transmission<br>
+                       • Healthcare: Patient data privacy compliance<br>
+                       • Government: Classified information protection</p>
                 </div>
             </div>
         </div>
@@ -416,7 +412,7 @@
                     <div class="code-block">${message}</div>
                     <strong>Encrypted Message:</strong><br>
                     <div class="code-block">${fakeEncrypted}</div>
-                    <small>🔒 This scrambled text is unreadable without the secret key!</small>
+                    <small>This scrambled text is unreadable without the secret key.</small>
                 </div>
             `;
             
@@ -431,7 +427,7 @@
             btn.textContent = 'Sending...';
             
             document.getElementById('sendResult').innerHTML = 
-                '<div class="status info">📡 Sending encrypted message to server...</div>';
+                '<div class="status info">Sending encrypted message to server...</div>';
             
             try {
                 // For demo purposes, we'll simulate the secure endpoint call
@@ -442,16 +438,16 @@
                     // Simulate server response
                     document.getElementById('serverResponse').innerHTML = `
                         <div class="status success">
-                            <strong>🖥️ Server says:</strong><br>
+                            <strong>Server Response:</strong><br>
                             <div class="code-block">
 {
   "message": "Request processed successfully!",
   "echo": "${encryptedData.original}",
   "serverTime": "${new Date().toISOString()}",
-  "status": "Your message was decrypted and processed securely! 🎉"
+  "status": "Your message was decrypted and processed securely."
 }
                             </div>
-                            <small>✨ The server decrypted your message, processed it, and sent back this response!</small>
+                            <small>The server decrypted your message, processed it, and sent back this response.</small>
                         </div>
                     `;
                 }, 1500);
