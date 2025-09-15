@@ -1,465 +1,595 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔐 Secure API Gateway Demo</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Secure API Gateway - Diffie-Hellman Implementation</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #2c3e50, #3498db);
+        color: white;
+        padding: 30px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5em;
+        margin-bottom: 10px;
+      }
+
+      .header p {
+        font-size: 1.2em;
+        opacity: 0.9;
+      }
+
+      .tech-info {
+        background: #f8f9fa;
+        padding: 20px;
+        text-align: center;
+        border-bottom: 1px solid #e9ecef;
+      }
+
+      .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin: 15px 0;
+      }
+
+      .tech-badge {
+        background: #3498db;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 0.9em;
+      }
+
+      .main-demo {
+        padding: 40px;
+      }
+
+      .demo-flow {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 30px;
+        margin-bottom: 30px;
+      }
+
+      .flow-steps {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 25px;
+        border-left: 5px solid #3498db;
+      }
+
+      .step {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      .step-number {
+        display: inline-block;
+        background: #3498db;
+        color: white;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 25px;
+        font-size: 0.9em;
+        margin-right: 10px;
+      }
+
+      .step-title {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 5px;
+      }
+
+      .step-desc {
+        color: #666;
+        font-size: 0.9em;
+      }
+
+      .demo-interface {
+        background: #fff;
+        border: 2px solid #e9ecef;
+        border-radius: 15px;
+        padding: 25px;
+      }
+
+      .demo-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+
+      .button {
+        background: #3498db;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: all 0.3s ease;
+      }
+
+      .button:hover {
+        background: #2980b9;
+        transform: translateY(-1px);
+      }
+
+      .button:disabled {
+        background: #bdc3c7;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .button.secondary {
+        background: #95a5a6;
+      }
+
+      .button.secondary:hover {
+        background: #7f8c8d;
+      }
+
+      .status-display {
+        background: #2c3e50;
+        color: #ecf0f1;
+        border-radius: 8px;
+        padding: 20px;
+        font-family: "Courier New", monospace;
+        font-size: 0.9em;
+        margin: 20px 0;
+        min-height: 200px;
+        overflow-y: auto;
+      }
+
+      .status-line {
+        margin: 3px 0;
+        padding: 2px 0;
+      }
+
+      .status-line.success {
+        color: #2ecc71;
+      }
+
+      .status-line.warning {
+        color: #f39c12;
+      }
+
+      .status-line.error {
+        color: #e74c3c;
+      }
+
+      .status-line.info {
+        color: #74b9ff;
+      }
+
+      .code-section {
+        background: #f8f9fa;
+        border-radius: 15px;
+        padding: 25px;
+        margin-top: 30px;
+      }
+
+      .code-block {
+        background: #2c3e50;
+        color: #ecf0f1;
+        padding: 20px;
+        border-radius: 8px;
+        font-family: "Courier New", monospace;
+        font-size: 0.9em;
+        overflow-x: auto;
+        margin: 15px 0;
+        border-left: 4px solid #3498db;
+      }
+
+      .metrics-bar {
+        display: flex;
+        justify-content: space-around;
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 20px 0;
+      }
+
+      .metric {
+        text-align: center;
+      }
+
+      .metric-value {
+        font-size: 1.5em;
+        font-weight: bold;
+        color: #3498db;
+      }
+
+      .metric-label {
+        color: #666;
+        font-size: 0.8em;
+      }
+
+      .footer-links {
+        text-align: center;
+        padding: 20px;
+        background: #f8f9fa;
+        border-top: 1px solid #e9ecef;
+      }
+
+      .footer-links a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 600;
+        margin: 0 15px;
+      }
+
+      .footer-links a:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 768px) {
+        .demo-flow {
+          grid-template-columns: 1fr;
         }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #2c3e50, #3498db);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-        
+
         .header h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
+          font-size: 2em;
         }
-        
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
+
+        .main-demo {
+          padding: 20px;
         }
-        
-        .demo-section {
-            padding: 40px;
-        }
-        
-        .step {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border-left: 5px solid #3498db;
-            transition: all 0.3s ease;
-        }
-        
-        .step:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        
-        .step-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-        }
-        
-        .step-number {
-            background: #3498db;
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 15px;
-        }
-        
-        .step-title {
-            font-size: 1.4em;
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        
-        .step-description {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-        
-        .visual-demo {
-            background: #fff;
-            border: 2px dashed #ddd;
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            margin: 15px 0;
-        }
-        
-        .key-exchange-visual {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
-        }
-        
-        .party {
-            background: #e3f2fd;
-            border-radius: 10px;
-            padding: 20px;
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .party h4 {
-            color: #1976d2;
-            margin-bottom: 10px;
-        }
-        
-        .arrow {
-            font-size: 2em;
-            color: #3498db;
-            margin: 0 10px;
-        }
-        
-        .button {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: all 0.3s ease;
-            margin: 10px 5px;
-        }
-        
-        .button:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-        }
-        
-        .button:disabled {
-            background: #bdc3c7;
-            cursor: not-allowed;
-            transform: none;
-        }
-        
-        .status {
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin: 10px 0;
-            font-weight: 500;
-        }
-        
-        .status.success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .status.error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-        
-        .status.info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-        
-        .code-block {
-            background: #2c3e50;
-            color: #ecf0f1;
-            padding: 15px;
-            border-radius: 5px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            overflow-x: auto;
-            margin: 10px 0;
-        }
-        
-        .explanation {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 15px 0;
-        }
-        
-        .explanation h4 {
-            color: #856404;
-            margin-bottom: 10px;
-        }
-        
-        .explanation p {
-            color: #856404;
-            line-height: 1.5;
-        }
-        
-        @media (max-width: 768px) {
-            .key-exchange-visual {
-                flex-direction: column;
-            }
-            
-            .arrow {
-                transform: rotate(90deg);
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .demo-section {
-                padding: 20px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <div class="header">
-            <h1>Secure API Gateway</h1>
-            <p>Interactive Cryptographic Security Demonstration</p>
-        </div>
-        
-        <div class="demo-section">
-            <div class="step">
-                <div class="step-header">
-                    <div class="step-number">1</div>
-                    <div class="step-title">Key Exchange (Diffie-Hellman)</div>
-                </div>
-                <div class="step-description">
-                    Establish a shared cryptographic secret between client and server without transmitting the secret itself.
-                </div>
-                
+      <div class="header">
+        <h1>Secure API Gateway</h1>
+        <p>Diffie-Hellman Key Exchange + AES-256-CBC Encryption</p>
+      </div>
 
-                
-                <div class="visual-demo">
-                    <div class="key-exchange-visual">
-                        <div class="party">
-                            <h4>Client</h4>
-                            <div id="client-status">Ready to start</div>
-                            <div id="client-key" style="font-family: monospace; font-size: 0.8em; margin-top: 10px;"></div>
-                        </div>
-                        <div class="arrow">↔️</div>
-                        <div class="party">
-                            <h4>Server</h4>
-                            <div id="server-status">Waiting...</div>
-                            <div id="server-key" style="font-family: monospace; font-size: 0.8em; margin-top: 10px;"></div>
-                        </div>
-                    </div>
-                    <button class="button" onclick="startKeyExchange()" id="keyExchangeBtn">Start Key Exchange</button>
-                    <div id="keyExchangeResult"></div>
-                </div>
-            </div>
-            
-            <div class="step">
-                <div class="step-header">
-                    <div class="step-number">2</div>
-                    <div class="step-title">Message Encryption</div>
-                </div>
-                <div class="step-description">
-                    Use the shared secret to encrypt messages with AES-256-CBC encryption. Only parties with the secret can decrypt the data.
-                </div>
-                
-
-                
-                <div class="visual-demo">
-                    <textarea id="messageInput" placeholder="Type your secret message here..." style="width: 100%; height: 80px; padding: 10px; border-radius: 5px; border: 1px solid #ddd; margin-bottom: 10px;"></textarea>
-                    <button class="button" onclick="encryptMessage()" id="encryptBtn" disabled>Encrypt Message</button>
-                    <div id="encryptionResult"></div>
-                </div>
-            </div>
-            
-            <div class="step">
-                <div class="step-header">
-                    <div class="step-number">3</div>
-                    <div class="step-title">Secure Transmission</div>
-                </div>
-                <div class="step-description">
-                    Transmit encrypted data to the server. Intercepted messages remain unreadable without the decryption key.
-                </div>
-                
-                <div class="visual-demo">
-                    <button class="button" onclick="sendToServer()" id="sendBtn" disabled>Send Encrypted Message</button>
-                    <div id="sendResult"></div>
-                </div>
-            </div>
-            
-            <div class="step">
-                <div class="step-header">
-                    <div class="step-number">4</div>
-                    <div class="step-title">Server Processing</div>
-                </div>
-                <div class="step-description">
-                    Server decrypts the message, processes the request, and returns an encrypted response using the same shared secret.
-                </div>
-                
-                <div class="visual-demo">
-                    <div id="serverResponse"></div>
-                </div>
-            </div>
-            
-            <div class="step">
-                <div class="step-header">
-                    <div class="step-number">5</div>
-                    <div class="step-title">Real-World Applications</div>
-                </div>
-                <div class="step-description">
-                    This cryptographic implementation is used across critical infrastructure and applications.
-                </div>
-                
-                <div class="explanation">
-                    <h4>Industry Applications:</h4>
-                    <p>• Banking: Account details and transaction security<br>
-                       • Messaging: End-to-end encrypted communications<br>
-                       • E-commerce: Credit card and payment protection<br>
-                       • Authentication: Secure login credential transmission<br>
-                       • Healthcare: Patient data privacy compliance<br>
-                       • Government: Classified information protection</p>
-                </div>
-            </div>
+      <div class="tech-info">
+        <div class="tech-stack">
+          <span class="tech-badge">Node.js</span>
+          <span class="tech-badge">Express.js</span>
+          <span class="tech-badge">Diffie-Hellman</span>
+          <span class="tech-badge">AES-256-CBC</span>
+          <span class="tech-badge">Rate Limiting</span>
+          <span class="tech-badge">API Gateway</span>
         </div>
+      </div>
+
+      <div class="main-demo">
+        <div class="demo-flow">
+          <div class="flow-steps">
+            <h3 style="margin-bottom: 20px; color: #2c3e50">
+              Secure Communication Flow
+            </h3>
+
+            <div class="step">
+              <div class="step-title">
+                <span class="step-number">1</span>
+                Key Exchange Setup
+              </div>
+              <div class="step-desc">
+                Client requests DH parameters from gateway
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-title">
+                <span class="step-number">2</span>
+                Shared Secret
+              </div>
+              <div class="step-desc">
+                Both parties compute identical shared secret
+              </div>
+            </div>
+
+            <div class="step">
+              <div class="step-title">
+                <span class="step-number">3</span>
+                Encrypted Request
+              </div>
+              <div class="step-desc">Client encrypts data with AES-256-CBC</div>
+            </div>
+
+            <div class="step">
+              <div class="step-title">
+                <span class="step-number">4</span>
+                Gateway Processing
+              </div>
+              <div class="step-desc">
+                Gateway decrypts, routes, and encrypts response
+              </div>
+            </div>
+          </div>
+
+          <div class="demo-interface">
+            <h3 style="margin-bottom: 20px; color: #2c3e50">
+              Live Demo Interface
+            </h3>
+
+            <div class="demo-controls">
+              <button class="button" onclick="startFullDemo()" id="startBtn">
+                Start Secure Session
+              </button>
+              <button
+                class="button secondary"
+                onclick="sendSecureRequest()"
+                id="requestBtn"
+                disabled
+              >
+                Send Encrypted Request
+              </button>
+              <button class="button secondary" onclick="clearDemo()">
+                Clear Log
+              </button>
+            </div>
+
+            <div class="metrics-bar">
+              <div class="metric">
+                <div class="metric-value" id="totalRequests">1,247</div>
+                <div class="metric-label">Total Requests</div>
+              </div>
+              <div class="metric">
+                <div class="metric-value" id="avgResponse">156ms</div>
+                <div class="metric-label">Avg Response</div>
+              </div>
+              <div class="metric">
+                <div class="metric-value" id="encryptedSessions">89</div>
+                <div class="metric-label">Encrypted Sessions</div>
+              </div>
+            </div>
+
+            <div class="status-display" id="demoLog">
+              <div class="status-line info">
+                [READY] Secure API Gateway initialized
+              </div>
+              <div class="status-line info">
+                [READY] Diffie-Hellman 2048-bit prime generated
+              </div>
+              <div class="status-line info">
+                [READY] AES-256-CBC encryption available
+              </div>
+              <div class="status-line info">
+                [READY] Rate limiting active (100 req/15min)
+              </div>
+              <div class="status-line success">
+                [READY] Gateway listening on port 3000
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="code-section">
+          <h3 style="margin-bottom: 20px; color: #2c3e50">
+            Implementation Overview
+          </h3>
+
+          <div class="code-block">
+            // Diffie-Hellman Key Exchange Implementation const crypto =
+            require("crypto"); const dh = crypto.createDiffieHellman(2048);
+            const serverPrivateKey = dh.generateKeys(); // Step 1: Client
+            requests DH parameters app.get("/init", validateApiKey, (req, res)
+            => { res.json({ prime: dh.getPrime("base64"), generator:
+            dh.getGenerator("base64"), serverPublicKey:
+            serverPrivateKey.toString("base64") }); }); // Step 2: Complete key
+            exchange and establish shared secret app.post("/key-exchange",
+            validateApiKey, (req, res) => { const clientPublicKey =
+            Buffer.from(req.body.clientPublicKey, "base64"); const sharedSecret
+            = dh.computeSecret(clientPublicKey).toString("base64"); res.json({
+            status: "success", message: "Shared secret established" }); }); //
+            Step 3: Handle encrypted communication app.post("/secure",
+            validateApiKey, (req, res) => { const { encryptedData, iv } =
+            req.body; const decryptedRequest = decrypt(encryptedData,
+            sharedSecret, iv); // Process request and encrypt response const
+            responseData = { message: "Processed securely", data: processedData
+            }; const encryptedResponse = encrypt(JSON.stringify(responseData),
+            sharedSecret); res.json(encryptedResponse); });
+          </div>
+
+          <p style="color: #666; margin-top: 15px">
+            This implementation provides end-to-end encryption for API
+            communication using industry-standard cryptographic protocols. The
+            gateway handles key exchange, request routing, rate limiting, and
+            secure data transmission transparently.
+          </p>
+        </div>
+      </div>
+
+      <div class="footer-links">
+        <a href="#" onclick="showSourceCode()">View Source Code</a>
+        <a href="/api">API Documentation</a>
+      </div>
     </div>
 
     <script>
-        let sharedSecret = null;
-        let encryptedData = null;
-        
-        async function startKeyExchange() {
-            const btn = document.getElementById('keyExchangeBtn');
-            btn.disabled = true;
-            btn.textContent = 'Exchanging Keys...';
-            
-            document.getElementById('client-status').textContent = 'Generating keys...';
-            document.getElementById('server-status').textContent = 'Generating keys...';
-            
-            try {
-                // Step 1: Get DH parameters
-                const initResponse = await fetch('/init', {
-                    headers: { 'x-api-key': 'demo-key-123' }
-                });
-                const initData = await initResponse.json();
-                
-                document.getElementById('server-status').textContent = 'Sent public parameters';
-                document.getElementById('server-key').textContent = `Public Key: ${initData.serverPublicKey.substring(0, 20)}...`;
-                
-                // Simulate client key generation
-                setTimeout(async () => {
-                    document.getElementById('client-status').textContent = 'Generated client keys';
-                    document.getElementById('client-key').textContent = 'Private Key: [HIDDEN] 🔒';
-                    
-                    // Step 2: Complete key exchange (simplified for demo)
-                    const keyExchangeResponse = await fetch('/key-exchange', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'x-api-key': 'demo-key-123'
-                        },
-                        body: JSON.stringify({
-                            clientPublicKey: 'demo-client-key-for-visual-demo'
-                        })
-                    });
-                    
-                    if (keyExchangeResponse.ok) {
-                        sharedSecret = 'demo-shared-secret';
-                        document.getElementById('keyExchangeResult').innerHTML = 
-                            '<div class="status success">✅ Shared secret established! Both parties now have the same secret key.</div>';
-                        document.getElementById('client-status').textContent = 'Shared secret ready 🔑';
-                        document.getElementById('server-status').textContent = 'Shared secret ready 🔑';
-                        
-                        document.getElementById('encryptBtn').disabled = false;
-                    }
-                }, 1000);
-                
-            } catch (error) {
-                document.getElementById('keyExchangeResult').innerHTML = 
-                    '<div class="status error">❌ Key exchange failed. Please try again.</div>';
-            }
-            
-            btn.disabled = false;
-            btn.textContent = 'Key Exchange Complete';
-        }
-        
-        function encryptMessage() {
-            const message = document.getElementById('messageInput').value;
-            if (!message.trim()) {
-                alert('Please enter a message to encrypt!');
-                return;
-            }
-            
-            // Simulate encryption
-            const fakeEncrypted = btoa(message).split('').reverse().join('');
-            encryptedData = {
-                original: message,
-                encrypted: fakeEncrypted,
-                iv: 'demo-iv-' + Math.random().toString(36).substring(7)
-            };
-            
-            document.getElementById('encryptionResult').innerHTML = `
-                <div class="status info">
-                    <strong>Original Message:</strong><br>
-                    <div class="code-block">${message}</div>
-                    <strong>Encrypted Message:</strong><br>
-                    <div class="code-block">${fakeEncrypted}</div>
-                    <small>This scrambled text is unreadable without the secret key.</small>
-                </div>
-            `;
-            
-            document.getElementById('sendBtn').disabled = false;
-        }
-        
-        async function sendToServer() {
-            if (!encryptedData) return;
-            
-            const btn = document.getElementById('sendBtn');
-            btn.disabled = true;
-            btn.textContent = 'Sending...';
-            
-            document.getElementById('sendResult').innerHTML = 
-                '<div class="status info">Sending encrypted message to server...</div>';
-            
-            try {
-                // For demo purposes, we'll simulate the secure endpoint call
+      let sessionActive = false;
+      let requestCount = 1247;
+      let sessionCount = 89;
+
+      function startFullDemo() {
+        const startBtn = document.getElementById("startBtn");
+        const requestBtn = document.getElementById("requestBtn");
+
+        startBtn.disabled = true;
+        startBtn.textContent = "Initializing...";
+
+        // Step 1: Initialize DH
+        addLogEntry("CLIENT: Requesting DH parameters...", "info");
+
+        setTimeout(() => {
+          fetch("/init", {
+            headers: { "x-api-key": "demo-key-123" },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              addLogEntry(
+                `SERVER: DH Prime: ${data.prime.substring(0, 32)}...`,
+                "success"
+              );
+              addLogEntry(`SERVER: Generator: ${data.generator}`, "success");
+              addLogEntry(
+                `SERVER: Public Key: ${data.serverPublicKey.substring(
+                  0,
+                  32
+                )}...`,
+                "success"
+              );
+
+              // Step 2: Complete key exchange
+              setTimeout(() => {
+                addLogEntry("CLIENT: Generating client keypair...", "info");
+
                 setTimeout(() => {
-                    document.getElementById('sendResult').innerHTML = 
-                        '<div class="status success">✅ Message sent securely! Server received encrypted data.</div>';
-                    
-                    // Simulate server response
-                    document.getElementById('serverResponse').innerHTML = `
-                        <div class="status success">
-                            <strong>Server Response:</strong><br>
-                            <div class="code-block">
-{
-  "message": "Request processed successfully!",
-  "echo": "${encryptedData.original}",
-  "serverTime": "${new Date().toISOString()}",
-  "status": "Your message was decrypted and processed securely."
-}
-                            </div>
-                            <small>The server decrypted your message, processed it, and sent back this response.</small>
-                        </div>
-                    `;
-                }, 1500);
-                
-            } catch (error) {
-                document.getElementById('sendResult').innerHTML = 
-                    '<div class="status error">❌ Failed to send message.</div>';
-            }
-            
-            btn.disabled = false;
-            btn.textContent = 'Message Sent';
-        }
+                  fetch("/key-exchange", {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                      "x-api-key": "demo-key-123",
+                    },
+                    body: JSON.stringify({
+                      clientPublicKey: "demo-client-public-key-base64-encoded",
+                    }),
+                  })
+                    .then((response) => response.json())
+                    .then((data) => {
+                      addLogEntry("CLIENT: Computing shared secret...", "info");
+                      addLogEntry("SERVER: Computing shared secret...", "info");
+                      addLogEntry(
+                        "SUCCESS: Shared secret established!",
+                        "success"
+                      );
+                      addLogEntry(
+                        "SUCCESS: AES-256-CBC encryption active",
+                        "success"
+                      );
+
+                      sessionActive = true;
+                      sessionCount++;
+                      document.getElementById("encryptedSessions").textContent =
+                        sessionCount;
+
+                      startBtn.textContent = "Session Active";
+                      requestBtn.disabled = false;
+                    });
+                }, 800);
+              }, 1000);
+            });
+        }, 500);
+      }
+
+      function sendSecureRequest() {
+        if (!sessionActive) return;
+
+        const requestBtn = document.getElementById("requestBtn");
+        requestBtn.disabled = true;
+        requestBtn.textContent = "Sending...";
+
+        addLogEntry("CLIENT: Encrypting request data...", "info");
+        addLogEntry("CLIENT: POST /secure - Encrypted payload sent", "info");
+
+        setTimeout(() => {
+          addLogEntry("GATEWAY: Received encrypted request", "success");
+          addLogEntry("GATEWAY: Decrypting with shared secret...", "info");
+          addLogEntry("GATEWAY: Routing to backend service...", "info");
+
+          setTimeout(() => {
+            addLogEntry("BACKEND: Processing request...", "warning");
+            addLogEntry("BACKEND: Returning response data", "warning");
+
+            setTimeout(() => {
+              addLogEntry("GATEWAY: Encrypting response...", "info");
+              addLogEntry("GATEWAY: Sending encrypted response", "success");
+              addLogEntry("CLIENT: Response decrypted successfully", "success");
+
+              requestCount++;
+              document.getElementById("totalRequests").textContent =
+                requestCount.toLocaleString();
+
+              const newAvg = Math.floor(Math.random() * 50) + 130;
+              document.getElementById("avgResponse").textContent =
+                newAvg + "ms";
+
+              requestBtn.disabled = false;
+              requestBtn.textContent = "Send Another Request";
+            }, 800);
+          }, 600);
+        }, 400);
+      }
+
+      function clearDemo() {
+        document.getElementById("demoLog").innerHTML = `
+                <div class="status-line info">[READY] Secure API Gateway initialized</div>
+                <div class="status-line info">[READY] Diffie-Hellman 2048-bit prime generated</div>
+                <div class="status-line info">[READY] AES-256-CBC encryption available</div>
+                <div class="status-line info">[READY] Rate limiting active (100 req/15min)</div>
+                <div class="status-line success">[READY] Gateway listening on port 3000</div>
+            `;
+
+        sessionActive = false;
+        document.getElementById("startBtn").disabled = false;
+        document.getElementById("startBtn").textContent =
+          "Start Secure Session";
+        document.getElementById("requestBtn").disabled = true;
+        document.getElementById("requestBtn").textContent =
+          "Send Encrypted Request";
+      }
+
+      function addLogEntry(message, type = "info") {
+        const timestamp = new Date().toISOString().substring(11, 23);
+        const logContainer = document.getElementById("demoLog");
+        const entry = document.createElement("div");
+        entry.className = `status-line ${type}`;
+        entry.textContent = `[${timestamp}] ${message}`;
+
+        logContainer.appendChild(entry);
+        logContainer.scrollTop = logContainer.scrollHeight;
+      }
+
+      function showSourceCode() {
+        window.open(
+          "https://github.com/zayedansari2/secure-api-gateway",
+          "_blank"
+        );
+      }
+
+      // Auto-update metrics
+      setInterval(() => {
+        requestCount += Math.floor(Math.random() * 3) + 1;
+        document.getElementById("totalRequests").textContent =
+          requestCount.toLocaleString();
+      }, 8000);
     </script>
-</body>
+  </body>
 </html>

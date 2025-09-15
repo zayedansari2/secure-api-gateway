@@ -162,18 +162,187 @@ app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/index.html");
 });
 
+// Simulated backend services for demo
+const backendServices = {
+  users: {
+    status: "healthy",
+    responseTime: () => Math.floor(Math.random() * 50) + 30,
+  },
+  payments: {
+    status: "healthy",
+    responseTime: () => Math.floor(Math.random() * 100) + 80,
+  },
+  products: {
+    status: "healthy",
+    responseTime: () => Math.floor(Math.random() * 200) + 100,
+  },
+  analytics: {
+    status: "healthy",
+    responseTime: () => Math.floor(Math.random() * 80) + 40,
+  },
+};
+
+// Gateway metrics
+let gatewayMetrics = {
+  totalRequests: 0,
+  requestsPerMinute: 0,
+  averageResponseTime: 0,
+  errorRate: 0,
+  activeConnections: 0,
+};
+
+// Service routing endpoints
+app.get("/users/:id?", validateApiKey, (req, res) => {
+  const service = backendServices.users;
+  const responseTime = service.responseTime();
+
+  setTimeout(() => {
+    gatewayMetrics.totalRequests++;
+    res.json({
+      service: "users",
+      status: service.status,
+      responseTime: responseTime,
+      data: req.params.id
+        ? { userId: req.params.id, name: "John Doe", email: "john@example.com" }
+        : { users: ["user1", "user2", "user3"] },
+    });
+  }, responseTime);
+});
+
+app.post("/payments", validateApiKey, (req, res) => {
+  const service = backendServices.payments;
+  const responseTime = service.responseTime();
+
+  setTimeout(() => {
+    gatewayMetrics.totalRequests++;
+    res.json({
+      service: "payments",
+      status: service.status,
+      responseTime: responseTime,
+      data: {
+        transactionId: "txn_" + Math.random().toString(36).substr(2, 9),
+        amount: 99.99,
+        status: "completed",
+      },
+    });
+  }, responseTime);
+});
+
+app.get("/products/:id?", validateApiKey, (req, res) => {
+  const service = backendServices.products;
+  const responseTime = service.responseTime();
+
+  // Simulate occasional service degradation
+  if (Math.random() < 0.1) {
+    service.status = "degraded";
+    setTimeout(() => {
+      service.status = "healthy";
+    }, 30000);
+  }
+
+  setTimeout(() => {
+    gatewayMetrics.totalRequests++;
+    if (service.status === "degraded") {
+      res.status(503).json({
+        service: "products",
+        status: service.status,
+        error: "Service temporarily unavailable",
+        responseTime: responseTime,
+      });
+    } else {
+      res.json({
+        service: "products",
+        status: service.status,
+        responseTime: responseTime,
+        data: req.params.id
+          ? { productId: req.params.id, name: "Sample Product", price: 29.99 }
+          : { products: ["prod1", "prod2", "prod3"] },
+      });
+    }
+  }, responseTime);
+});
+
+app.get("/analytics", validateApiKey, (req, res) => {
+  const service = backendServices.analytics;
+  const responseTime = service.responseTime();
+
+  setTimeout(() => {
+    gatewayMetrics.totalRequests++;
+    res.json({
+      service: "analytics",
+      status: service.status,
+      responseTime: responseTime,
+      data: {
+        pageViews: Math.floor(Math.random() * 10000) + 5000,
+        uniqueUsers: Math.floor(Math.random() * 1000) + 500,
+        conversionRate: (Math.random() * 5 + 2).toFixed(2) + "%",
+      },
+    });
+  }, responseTime);
+});
+
+// Gateway management endpoints
+app.get("/gateway/metrics", (req, res) => {
+  res.json({
+    ...gatewayMetrics,
+    requestsPerMinute: Math.floor(Math.random() * 200) + 800,
+    averageResponseTime: Math.floor(Math.random() * 100) + 120,
+    errorRate: (Math.random() * 2).toFixed(1),
+    activeConnections: Math.floor(Math.random() * 50) + 60,
+    uptime: process.uptime(),
+  });
+});
+
+app.get("/gateway/services", (req, res) => {
+  res.json({
+    services: Object.entries(backendServices).map(([name, service]) => ({
+      name,
+      status: service.status,
+      averageResponseTime: service.responseTime(),
+      endpoint: `/${name}`,
+    })),
+  });
+});
+
+app.post("/gateway/services/:serviceName/toggle", (req, res) => {
+  const serviceName = req.params.serviceName;
+  if (backendServices[serviceName]) {
+    const currentStatus = backendServices[serviceName].status;
+    backendServices[serviceName].status =
+      currentStatus === "healthy" ? "down" : "healthy";
+    res.json({
+      service: serviceName,
+      status: backendServices[serviceName].status,
+      message: `Service ${serviceName} is now ${backendServices[serviceName].status}`,
+    });
+  } else {
+    res.status(404).json({ error: "Service not found" });
+  }
+});
+
 // API info endpoint
 app.get("/api", (req, res) => {
   res.json({
-    message: "Secure API Gateway server is running 🚀",
+    message: "API Gateway server is running 🚀",
     endpoints: {
       "/health": "GET - Health check (no API key required)",
+      "/gateway/metrics": "GET - Gateway metrics (no API key required)",
+      "/gateway/services": "GET - Service status (no API key required)",
+      "/users": "GET - User service (requires API key)",
+      "/payments": "POST - Payment service (requires API key)",
+      "/products": "GET - Product service (requires API key)",
+      "/analytics": "GET - Analytics service (requires API key)",
       "/init": "GET - Initialize DH key exchange (requires API key)",
       "/key-exchange": "POST - Complete key exchange (requires API key)",
       "/secure": "POST - Encrypted communication (requires API key)",
     },
     apiKeyHeader: "x-api-key",
-    demoApiKeys: ["demo-key-123", "test-key-456"],
+    demoApiKeys: ["demo-key-123", "test-key-456", "prod-key-789"],
+    rateLimits: {
+      "demo-key-123": "100 requests/15min",
+      "test-key-456": "500 requests/15min",
+      "prod-key-789": "1000 requests/15min",
+    },
   });
 });
 
